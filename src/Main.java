@@ -6,16 +6,52 @@ public class Main {
         System.out.print("Введите выражение: ");
         String input = in.nextLine();
         in.close();
+        String newinput = input.replaceAll("[,.]", "");
+        int forR=0;
+        int forS=0;
+        for (int i = 0; i < newinput.length()-1; i++) {
+            if (Character.isDigit(newinput.charAt(i))) {
+                if (i!=newinput.length()-1&&newinput.charAt(i+1)!='р'&&!Character.isDigit(newinput.charAt(i+1))){
+                   forR=newinput.charAt(i);
+                }
+            }
+        }
+        for (int i = newinput.length()-1; i>=0; i--) {
+            if (Character.isDigit(newinput.charAt(i))) {
+                if (i!=0&&newinput.charAt(i - 1) != '$' && !Character.isDigit(newinput.charAt(i - 1))) {
+                    forS=newinput.charAt(i);
+                }
+            }
+        }
+        if (forS==forR){
+            System.out.println("ОШИБКА.Проверьте правильность введённых данных.");
+            return;
+        }
+
+        String secin= newinput.replaceAll("[^р$()]", "");
+
+        for (int i = 0; i < secin.length()-1; i++) {
+            if (secin.charAt(i) == '$'&& secin.charAt(i+1)!='$'&&secin.charAt(i+1)!='('&&secin.charAt(i+1)!=')'){
+                System.out.println("ОШИБКА.Проверьте правильность введённых данных.");
+
+            }
+        }
+        for (int i = 0; i < secin.length()-1; i++) {
+            if (secin.charAt(i) == 'р'&& secin.charAt(i+1)!='р'&&secin.charAt(i+1)!='('&&secin.charAt(i+1)!=')'){
+                System.out.println("ОШИБКА.Проверьте правильность введённых данных.");
+
+            }
+        }
+
 
         double result = evaluateExpression(input);
-        System.out.println("Ответ: " + result+" апельсинов");
+        System.out.println("Ответ: " + result+" ");
     }
 
     private static double evaluateExpression(String expression) {
         expression = expression.replaceAll("\\s+", "");
         expression = expression.replace(',', '.');
-        expression = expression.replace('р', ' ');
-        expression = expression.replace('$', ' ');
+        expression = expression.replaceAll("[р$]", "");
 
         if (!expression.contains("(")) {
             return evaluateSimpleExpression(expression);
