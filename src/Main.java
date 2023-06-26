@@ -1,7 +1,11 @@
+
+import java.io.IOException;
+import java.util.Properties;
 import java.util.Scanner;
 
+
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Scanner in = new Scanner(System.in);
         System.out.print("Введите выражение: ");
         String input = in.nextLine();
@@ -48,7 +52,7 @@ public class Main {
         System.out.println("Ответ: " + result+" ");
     }
 
-    private static double evaluateExpression(String expression) {
+    private static double evaluateExpression(String expression) throws IOException {
         expression = expression.replaceAll("\\s+", "");
         expression = expression.replace(',', '.');
         expression = expression.replaceAll("[р$]", "");
@@ -67,13 +71,20 @@ public class Main {
         } else if (prefix.endsWith("toRubles")) {
             function = "toRubles";
         }
+        Properties properties = new Properties();
 
-        String innerExpression = expression.substring(openingIndex + 1, closingIndex);
+        System.getProperties().load(ClassLoader.getSystemResourceAsStream("cfg.properties"));
+        String scfq=System.getProperty("UR");
+
+        int cfg=Integer.parseInt(scfq);
+
+
+                String innerExpression = expression.substring(openingIndex + 1, closingIndex);
         double innerResult;
         if (function.equals("toDollars")) {
-            innerResult = evaluateSimpleExpression(innerExpression) / 80;
+            innerResult = evaluateSimpleExpression(innerExpression) /cfg;
         } else if (function.equals("toRubles")) {
-            innerResult = evaluateSimpleExpression(innerExpression) * 80;
+            innerResult = evaluateSimpleExpression(innerExpression) * cfg;
         } else {
             innerResult = evaluateSimpleExpression(innerExpression);
         }
